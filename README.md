@@ -1,6 +1,8 @@
 # cloudshell_lcd
 ODROID-XU4 Cloudshell LCD Informations for Server
 
+<img src="doc/running.png" alt="hi" width="500"/>
+
 A fork from the original repo for archlinux.
 
 Differences from original package:
