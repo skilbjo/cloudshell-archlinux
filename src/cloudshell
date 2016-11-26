@@ -32,11 +32,11 @@ export TEMPERATURE_FORMAT="C"
 export EXT_IP_REFRESH="10"
 
 get_external_ip() {
-  export EXTERNAL_IP=`/usr/bin/curl -s http://mdrjr.net/ip.php`
+  export EXTERNAL_IP=$(/usr/bin/curl -s http://mdrjr.net/ip.php)
 }
 
 get_full_date() {
-  export DATE=`date +"%Y-%m-%d %H:%M:%S"`
+  export DATE=$(date +"%Y-%m-%d %H:%M:%S")
 }
 
 get_hostname() {
@@ -44,25 +44,25 @@ get_hostname() {
 }
 
 get_internal_ip() {
-  export INTERNAL_IP=`ifconfig $NETIF | grep 'inet addr:'| cut -d: -f2 | awk '{ print $1}'`
+  export INTERNAL_IP=$(ifconfig $NETIF | grep 'inet addr:'| cut -d: -f2 | awk '{ print $1}')
 }
 
 get_net_tx_rx_realtime() {
   net_txrx=`sar -n DEV 1 1 | grep $NETIF | tail -n 1 | gawk '{print $5" "$6}'`
   # in MB/s
-  _tx=`echo $net_txrx | awk '{printf $1}'`
-  _rx=`echo $net_txrx | awk '{printf $2}'`
-  export NET_TX=`echo "scale=1; x=$_tx/1024; if(x<1) print 0; x" | bc`
-  export NET_RX=`echo "scale=1; x=$_rx/1024; if(x<1) print 0; x" | bc`
+  _tx=$(echo $net_txrx | awk '{printf $1}')
+  _rx=$(echo $net_txrx | awk '{printf $2}')
+  export NET_TX=$(echo "scale=1; x=$_tx/1024; if(x<1) print 0; x" | bc)
+  export NET_RX=$(echo "scale=1; x=$_rx/1024; if(x<1) print 0; x" | bc)
 
 }
 
 get_disk_info() {
-  t=`df -h | grep $SATA`
-  export DISK_SIZE=`echo $t | awk '{printf $2}'`
-  export DISK_USED=`echo $t | awk '{printf $3}'`
-  export DISK_FREE=`echo $t | awk '{printf $4}'`
-  export DISK_USED_PCT=`echo $t | awk '{printf $5}'`
+  t=$(df -h | grep $SATA)
+  export DISK_SIZE=$(echo $t | awk '{printf $2}')
+  export DISK_USED=$(echo $t | awk '{printf $3}')
+  export DISK_FREE=$(echo $t | awk '{printf $4}')
+  export DISK_USED_PCT=$(echo $t | awk '{printf $5}')
 }
 
 get_memory_info() {
@@ -73,8 +73,8 @@ get_memory_info() {
 }
 
 get_cpu_usage() {
-  cpufree=`mpstat 1 1 | tail -n 1 | awk '{printf $12}'`
-  export CPU_USAGE=`echo "scale=1; x=100-$cpufree; if(x<1) print 0; x" | bc`
+  cpufree=$(mpstat 1 1 | tail -n 1 | awk '{printf $12}')
+  export CPU_USAGE=$(echo "scale=1; x=100-$cpufree; if(x<1) print 0; x" | bc)
 }
 
 get_cpu_temperature() {
@@ -142,7 +142,7 @@ while true; do
   get_cpu_temperature
   get_samba_connections
   get_nfs_connections
-    get_process_count
+  get_process_count
 
   # clear the screen every loop
   # we only wipe the screen when we are ready to write data to it
