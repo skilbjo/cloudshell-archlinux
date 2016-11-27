@@ -154,9 +154,9 @@ while true; do
 
   echo -e " CPU Usage: $CBLUE $cpu_usage%$COFF\tCPU Temp: $CBLUE$CPU_TEMP$COFF" > $oc
   echo -e " Memory Free: $CBLUE $MEM_FREE MB$COFF\tUsed: $CBLUE$MEM_USED MB$COFF" > $oc
-  echo -e " IP: $CBLUE$lan_ip$COFF\tRem: $CBLUE$wan_ip$COFF" > $oc
-  echo -e " TX: $CBLUE$net_tx MB/s$COFF \t\tRX: $CBLUE$net_rx MB/s$COFF" > $oc
-  echo -e " Disk Used: $CBLUE$DISK_USED$COFF ($CBLUE$DISK_USED_PCT$COFF)  Free: $CBLUE$DISK_FREE$COFF" > $oc
+  echo -e " WAN: $CBLUE$wan_ip$COFF\t\t RX: $CBLUE$net_rx MB/s$COFF" > $oc
+  echo -e " LAN: $CBLUE$lan_ip$COFF\t   TX: $CBLUE$net_tx MB/s$COFF" > $oc
+  echo -e " Disk Used: $CBLUE$DISK_USED$COFF ($CBLUE$DISK_USED_PCT$COFF)\tFree: $CBLUE$DISK_FREE$COFF" > $oc
   echo -e " Samba Clients: $CBLUE$SAMBA_CONNECTIONS$COFF" > $oc
   echo -e " NFS Connections: $CBLUE$NFS_CONNECTIONS$COFF" > $oc
   echo -e " Processes Running: $CBLUE$PROCESS_COUNT$COFF" > $oc
