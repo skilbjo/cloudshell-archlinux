@@ -34,8 +34,6 @@ get_nfs_connections
   get_net_tx_rx_realtime
   get_process_count
 
-  echo "error after fn calls"
-
   #clear > $oc
   echo "" > $oc
   echo -e "$blue $HOSTNAME $off: $DATE" > $oc
