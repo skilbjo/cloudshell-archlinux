@@ -40,7 +40,7 @@ get_memory_info() {
   export mem_total=$[`cat /proc/meminfo | grep MemTotal | awk '{print $2'}` / 1024]
   export mem_used=$[$mem_total - $mem_free]
   #export mem_per=$[$mem_used / $mem_total]
-  export mem_per=$(echo "scale=1; $mem_used / $mem_total" | bc)
+  export mem_per=$(echo "scale=1; $mem_used / $mem_total * 114" | bc)
 }
 
 get_cpu_usage() {
