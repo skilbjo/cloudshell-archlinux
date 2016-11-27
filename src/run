@@ -3,37 +3,6 @@
 source ./src/vars
 source ./src/fns
 
-# console font
-export TERM="linux"
-export font="Lat2-Terminus16.psfu.gz"
-setfont $font > $oc
-
-# Output Console (ttyX)
-export terminal="1"
-
-# Network Interface: eth0, wlan0, ....
-export interface="eth0"
-
-# SATA HDD mount
-export root_fs="/dev/root"
-
-# Screen refresh in seconds
-export REFRESH="2"
-
-# CPU Temperature in C or F
-export temperature_format="F"
-
-# External IP Refresh counts
-export ext_ip_refresh="10"
-
-# local variables
-ext_ip_refresh_c=0
-off=$(tput sgr0)
-green=$(tput setaf 2)
-red=$(tput setaf 1)
-blue=$(tput setaf 6)
-oc="/dev/tty$terminal"
-
 # This isn't likely to change often
 get_hostname
 
@@ -72,8 +41,8 @@ while true; do
   echo -e "$blue $HOSTNAME $off: $DATE" > $oc
   echo "" > $oc
 
-  echo -e " CPU Usage: $blue $cpu_usage%$off\tCPU Temp: $blue$CPU_TEMP$off" > $oc
-  echo -e " Memory Free: $blue $MEM_FREE MB$off\tUsed: $blue$MEM_USED MB$off" > $oc
+  echo -e " CPU Usage: $blue$cpu_usage%$off\tCPU Temp: $blue$CPU_TEMP$off" > $oc
+  echo -e " RAM Used: $blue$mem_usedmb$off ($blue$mem_per%)$off\tFree: $blue$mem_freemb$off" > $oc
   echo -e " Disk Used: $blue$DISK_USED$off ($blue$DISK_USED_PCT$off)\tFree: $blue$DISK_FREE$off" > $oc
   echo -e " WAN: $blue$wan_ip$off\tRX: $blue$net_rx MB/s$off" > $oc
   echo -e " LAN: $blue$lan_ip$off\tTX: $blue$net_tx MB/s$off" > $oc
