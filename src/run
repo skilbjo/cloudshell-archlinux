@@ -42,7 +42,7 @@ while true; do
   echo "" > $oc
 
   echo -e " CPU Usage: $blue$cpu_usage%$off\tCPU Temp: $blue$CPU_TEMP$off" > $oc
-  echo -e " RAM Used: $blue$mem_usedmb$off ($blue$mem_per%)$off\tFree: $blue$mem_freemb$off" > $oc
+  echo -e " RAM Used: $blue$mem_used mb$off ($blue$mem_per%)$off\tFree: $blue$mem_free mb$off" > $oc
   echo -e " Disk Used: $blue$DISK_USED$off ($blue$DISK_USED_PCT$off)\tFree: $blue$DISK_FREE$off" > $oc
   echo -e " WAN: $blue$wan_ip$off\tRX: $blue$net_rx MB/s$off" > $oc
   echo -e " LAN: $blue$lan_ip$off\tTX: $blue$net_tx MB/s$off" > $oc
