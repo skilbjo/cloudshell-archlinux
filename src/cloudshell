@@ -91,14 +91,14 @@ get_cpu_temperature() {
 
 get_samba_connections() {
   if [ ! -f /usr/bin/smbstatus ]; then
-    export SAMBA_CONNECTIONS=0
+    export samba_connections=0
   else
-    export SAMBA_CONNECTIONS=`smbstatus -b | grep -c ipv`
+    export samba_connections=$(smbstatus -b | grep -c ipv)
   fi
 }
 
 get_nfs_connections() {
-  export NFS_CONNECTIONS=`netstat -an | grep 2049 | grep -c ESTA`
+  export NFS_CONNECTIONS=$(netstat -an | grep 2049 | grep -c ESTA)
 }
 
 get_process_count() {
@@ -107,10 +107,10 @@ get_process_count() {
 
 # local variables
 ext_ip_refresh_c=0
-COFF=$(tput sgr0)
+off=$(tput sgr0)
 CGREEN=$(tput setaf 2)
 CRED=$(tput setaf 1)
-CBLUE=$(tput setaf 6)
+blue=$(tput setaf 6)
 oc="/dev/tty$OUTPUT_CONSOLE"
 
 # Ensure that we are in the right TTY
@@ -149,17 +149,17 @@ while true; do
 
   # format the data on screen
   echo "" > $oc
-  echo -e "$CBLUE $HOSTNAME \t $COFF: $DATE" > $oc
+  echo -e "$blue $HOSTNAME $off: $DATE" > $oc
   echo "" > $oc
 
-  echo -e " CPU Usage: $CBLUE $cpu_usage%$COFF\tCPU Temp: $CBLUE$CPU_TEMP$COFF" > $oc
-  echo -e " Memory Free: $CBLUE $MEM_FREE MB$COFF\tUsed: $CBLUE$MEM_USED MB$COFF" > $oc
-  echo -e " WAN: $CBLUE$wan_ip$COFF\t\t RX: $CBLUE$net_rx MB/s$COFF" > $oc
-  echo -e " LAN: $CBLUE$lan_ip$COFF\t   TX: $CBLUE$net_tx MB/s$COFF" > $oc
-  echo -e " Disk Used: $CBLUE$DISK_USED$COFF ($CBLUE$DISK_USED_PCT$COFF)\tFree: $CBLUE$DISK_FREE$COFF" > $oc
-  echo -e " Samba Clients: $CBLUE$SAMBA_CONNECTIONS$COFF" > $oc
-  echo -e " NFS Connections: $CBLUE$NFS_CONNECTIONS$COFF" > $oc
-  echo -e " Processes Running: $CBLUE$PROCESS_COUNT$COFF" > $oc
+  echo -e " CPU Usage: $blue $cpu_usage%$off\tCPU Temp: $blue$CPU_TEMP$off" > $oc
+  echo -e " Memory Free: $blue $MEM_FREE MB$off\tUsed: $blue$MEM_USED MB$off" > $oc
+  echo -e " WAN: $blue$wan_ip$off\t\tRX: $blue$net_rx MB/s$off" > $oc
+  echo -e " LAN: $blue$lan_ip$off\tTX: $blue$net_tx MB/s$off" > $oc
+  echo -e " Disk Used: $blue$DISK_USED$off ($blue$DISK_USED_PCT$off)\tFree: $blue$DISK_FREE$off" > $oc
+  echo -e " samba clients: $blue$samba_connections$off" > $oc
+  echo -e " NFS Connections: $blue$NFS_CONNECTIONS$off" > $oc
+  echo -e " Processes Running: $blue$PROCESS_COUNT$off" > $oc
 
   sleep $REFRESH
 done
