@@ -21,8 +21,8 @@ get_net_tx_rx_realtime() {
   # in MB/s
   _tx=$(echo $net_txrx | awk '{printf $1}')
   _rx=$(echo $net_txrx | awk '{printf $2}')
-  export net_tx=$(echo "scale=1; x=$_tx/1024; if(x<1) print 0; x" | bc)
-  export net_rx=$(echo "scale=1; x=$_rx/1024; if(x<1) print 0; x" | bc)
+  export net_tx=$(echo "scale=1; x=$_tx/1024; if(x<0.1) print 0.1; x" | bc)
+  export net_rx=$(echo "scale=1; x=$_rx/1024; if(x<0.1) print 0.1; x" | bc)
 
 }
 
@@ -39,7 +39,8 @@ get_memory_info() {
   export mem_free=$[`cat /proc/meminfo | grep MemFree | awk '{print $2'}` / 1024]
   export mem_total=$[`cat /proc/meminfo | grep MemTotal | awk '{print $2'}` / 1024]
   export mem_used=$[$mem_total - $mem_free]
-  export mem_per=$[$mem_used / $mem_total]
+  #export mem_per=$[$mem_used / $mem_total]
+  export mem_per=$(echo "scale=2; $mem_used / $mem_total" | bc)
 }
 
 get_cpu_usage() {
