@@ -17,7 +17,7 @@ setfont $CONSOLE_FONT > $oc
 export OUTPUT_CONSOLE="1"
 
 # Network Interface: eth0, wlan0, ....
-export NETIF="eth0"
+export interface="eth0"
 
 # SATA HDD mount
 export root_fs="/dev/root"
@@ -32,7 +32,7 @@ export TEMPERATURE_FORMAT="F"
 export EXT_IP_REFRESH="10"
 
 get_external_ip() {
-  export EXTERNAL_IP=$(/usr/bin/curl -s http://mdrjr.net/ip.php)
+  export wan_ip=$(/usr/bin/curl -s http://mdrjr.net/ip.php)
 }
 
 get_full_date() {
@@ -44,16 +44,16 @@ get_hostname() {
 }
 
 get_internal_ip() {
-  export INTERNAL_IP=$(ifconfig $NETIF | grep 'inet '| cut -d: -f2 | awk '{print $2}')
+  export lan_ip=$(ifconfig $interface | grep 'inet '| cut -d: -f2 | awk '{print $2}')
 }
 
 get_net_tx_rx_realtime() {
-  net_txrx=$(sar -n DEV 1 1 | grep $NETIF | tail -n 1 | gawk '{print $5" "$6}')
+  net_txrx=$(sar -n DEV 1 1 | grep $interface | tail -n 1 | gawk '{print $5" "$6}')
   # in MB/s
   _tx=$(echo $net_txrx | awk '{printf $1}')
   _rx=$(echo $net_txrx | awk '{printf $2}')
-  export NET_TX=$(echo "scale=1; x=$_tx/1024; if(x<1) print 0; x" | bc)
-  export NET_RX=$(echo "scale=1; x=$_rx/1024; if(x<1) print 0; x" | bc)
+  export net_tx=$(echo "scale=1; x=$_tx/1024; if(x<1) print 0; x" | bc)
+  export net_rx=$(echo "scale=1; x=$_rx/1024; if(x<1) print 0; x" | bc)
 
 }
 
@@ -74,9 +74,9 @@ get_memory_info() {
 
 get_cpu_usage() {
   cpufree=$(mpstat 1 1 | tail -n 1 | awk '{printf $12}')
-  export CPU_USAGE=$(echo "scale=2; x=100-$cpufree; if(x<0.01) print 0.01; x" | bc)
-  #export CPU_USAGE=$(echo "scale=2; x=100-$cpufree; x" | bc)
-  #export CPU_USAGE=$(echo "scale=2; x=100-$cpufree; if(x<1) print 0; x" | bc)
+  export cpu_usage=$(echo "scale=1; x=100-$cpufree; if(x<0.01) print 0.01; x" | bc)
+  #export cpu_usage=$(echo "scale=2; x=100-$cpufree; x" | bc)
+  #export cpu_usage=$(echo "scale=2; x=100-$cpufree; if(x<1) print 0; x" | bc)
 }
 
 get_cpu_temperature() {
@@ -149,31 +149,26 @@ while true; do
 
   # format the data on screen
   echo "" > $oc
-  echo -e "$CBLUE $HOSTNAME $COFF: $DATE" > $oc
+  echo -e "$CBLUE $HOSTNAME \t $COFF: $DATE" > $oc
   echo "" > $oc
 
-  # line CPU Usage
-  echo -e "  CPU Usage: $CBLUE$CPU_USAGE%$COFF   CPU Temp: $CBLUE$CPU_TEMP$COFF" > $oc
+  echo -e " CPU Usage: $CBLUE $cpu_usage%$COFF\t\tCPU Temp: $CBLUE$CPU_TEMP$COFF" > $oc
+  echo -e " Memory Free: $CBLUE $MEM_FREE MB$COFF\t\tUsed: $CBLUE$MEM_USED MB$COFF" > $oc
+  echo -e " IP: $CBLUE$lan_ip$COFF   Rem: $CBLUE$wan_ip$COFF" > $oc
+  echo -e " TX: $CBLUE$net_tx MB/s$COFF \t\tRX: $CBLUE$net_rx MB/s$COFF" > $oc
+  echo -e " Disk Used: $CBLUE$DISK_USED$COFF ($CBLUE$DISK_USED_PCT$COFF)  Free: $CBLUE$DISK_FREE$COFF" > $oc
+  echo -e " Samba Clients: $CBLUE$SAMBA_CONNECTIONS$COFF" > $oc
+  echo -e " NFS Connections: $CBLUE$NFS_CONNECTIONS$COFF" > $oc
+  echo -e " Processes Running: $CBLUE$PROCESS_COUNT$COFF" > $oc
 
-  # Line Memory
-  echo -e "  Memory Free: $CBLUE$MEM_FREE MB$COFF   Used: $CBLUE$MEM_USED MB$COFF" > $oc
-
-  # Line IP Addresses
-  echo -e "  IP: $CBLUE$INTERNAL_IP$COFF   Rem: $CBLUE$EXTERNAL_IP$COFF" > $oc
-
-  # Line network usage
-  echo -e "  TX: $CBLUE$NET_TX MB/s$COFF RX: $CBLUE$NET_RX MB/s$COFF" > $oc
-
-  # Line Disk Space
-  echo -e "  Disk Used: $CBLUE$DISK_USED$COFF ($CBLUE$DISK_USED_PCT$COFF)  Free: $CBLUE$DISK_FREE$COFF" > $oc
-  # Line Samba
-  echo -e "  Samba Clients: $CBLUE$SAMBA_CONNECTIONS$COFF" > $oc
-  # line NFS
-  echo -e "  NFS Connections: $CBLUE$NFS_CONNECTIONS$COFF" > $oc
-
-  # line Processes
-  echo -e "  Processes Running: $CBLUE$PROCESS_COUNT$COFF" > $oc
-
-  # sleep
   sleep $REFRESH
 done
+
+  # line CPU Usage
+  # Line Memory
+  # Line IP Addresses
+  # Line network usage
+  # Line Disk Space
+  # Line Samba
+  # line NFS
+  # line Processes
